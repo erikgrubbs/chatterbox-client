@@ -22,6 +22,12 @@
     </script>
   </head>
   <body>
+      <div class="friends">
+          <h3>Friends</h3>
+          <div class="friendslist">
+            <p>you have no friends :(</p>
+          </div> 
+        </div>
     <div id="main">
       <h1>chatterbox</h1>
       <div class="spinner"><img src="client/images/spiffygif_46x46.gif"></div>
@@ -30,9 +36,17 @@
         <select>
         </select>         
         <button>Add Room</button>
+        <div id="roomform">
+          <form>
+            <h4>Add a room and a message</h4>
+            <input type="text" placeholder="Enter Roomname" id="nameform" required>
+            <button>Submit</button>
+          </form>
+        </div>
       </div>
       <form action="#" id="send" method="post">
-        <input type="text" name="message" id="message"/>
+        <h4>Add a message</h4>
+        <input type="text" placeholder="Enter a message" name="message" id="message"/>
         <input type="submit" name="submit" class="submit"/>
       </form>
     </div>

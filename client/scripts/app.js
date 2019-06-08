@@ -25,6 +25,8 @@ var App = {
     Messages.allMessages = newMessages;
     Rooms.allRooms = newRooms;
     Parse.readAll((data) => {
+      console.log(data);
+
       data.results.forEach(msg => {
         if (msg.username && msg.roomname && msg.text) {
           if (msg.roomname.length > 0 && !msg.roomname.includes('<')) {
