@@ -1,27 +1,40 @@
 var App = {
 
   $spinner: $('.spinner img'),
-
   username: 'anonymous',
+
 
   initialize: function() {
     App.username = window.location.search.substr(10);
 
-    FormView.initialize();
-    RoomsView.initialize();
-    MessagesView.initialize();
-
     // Fetch initial batch of messages
     App.startSpinner();
-    App.fetch(App.stopSpinner);
-
+    App.fetch(function() {
+      FormView.initialize();
+      RoomsView.initialize();
+      MessagesView.initialize();
+      App.stopSpinner();
+    });
+ 
   },
 
-  fetch: function(callback = ()=>{}) {
+  fetch: function(callback) {
+    MessagesView.$chats.empty();
+    var newMessages = [];
+    var newRooms = [];
+    Messages.allMessages = newMessages;
+    Rooms.allRooms = newRooms;
     Parse.readAll((data) => {
-      // examine the response from the server request:
-      console.log(data);
-
+      data.results.forEach(msg => {
+        if (msg.username && msg.roomname && msg.text) {
+          if (msg.roomname.length > 0 && !msg.roomname.includes('<')) {
+            Messages.allMessages.push(msg);
+            if (!Rooms.allRooms.includes(msg.roomname)) {
+              Rooms.allRooms.push(msg.roomname);
+            }  
+          }             
+        } 
+      });
       callback();
     });
   },
