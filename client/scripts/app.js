@@ -10,21 +10,31 @@ var App = {
     // Fetch initial batch of messages
     App.startSpinner();
     App.fetch(function() {
-      App.stopSpinner();
       FormView.initialize();
       RoomsView.initialize();
       MessagesView.initialize();
+      App.stopSpinner();
     });
  
   },
 
   fetch: function(callback) {
+    MessagesView.$chats.empty();
+    var newMessages = [];
+    var newRooms = [];
+    Messages.allMessages = newMessages;
+    Rooms.allRooms = newRooms;
     Parse.readAll((data) => {
-      // examine the response from the server request:
-      console.log(data);
-      for (var i = 0; i < data.results.length; i++) {
-        Messages.allMessages.push(data.results[i]);
-      }
+      data.results.forEach(msg => {
+        if (msg.username && msg.roomname && msg.text) {
+          if (msg.roomname.length > 0 && !msg.roomname.includes('<')) {
+            Messages.allMessages.push(msg);
+            if (!Rooms.allRooms.includes(msg.roomname)) {
+              Rooms.allRooms.push(msg.roomname);
+            }  
+          }             
+        } 
+      });
       callback();
     });
   },

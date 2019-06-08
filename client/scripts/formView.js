@@ -8,14 +8,21 @@ var FormView = {
 
   handleSubmit: function(event) {
     // Stop the browser from submitting the form
-    console.log(event);
+    App.startSpinner();
+    var input = new Message(document.getElementById('message').value);
+    Parse.create(input); 
+    App.fetch(function() {
+      FormView.initialize();
+      RoomsView.initialize();
+      MessagesView.initialize();
+      App.stopSpinner();
+    });  
     event.preventDefault();
-    
-    console.log('click!');
   },
 
   setStatus: function(active) {
     var status = active ? 'true' : null;
+    FormView.$form.find('input[type=submit]').attr('disabled', status);
     FormView.$form.find('input[type=submit]').attr('disabled', status);
   }
 
